@@ -19,7 +19,7 @@
       return require('../src/ec2-vm-scheduler')(this.robot);
     });
     return it('registers a respond listener', function() {
-      return expect(this.robot.respond).to.have.been.calledWith(/hello/);
+      return expect(this.robot.respond).to.have.been.calledWith(/ec2\s+start\s+(\S+)/);
     });
   });
 
