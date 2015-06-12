@@ -14,14 +14,6 @@
 // Author:
 //   mollifier <mollifier@gmail.com>
 
-//module.exports = (robot) ->
-//  robot.respond /hello/, (res) ->
-//    res.reply "hello!"
-//
-//  robot.hear /orly/, ->
-//    res.send "yarly"
-
-
 module.exports = function(robot) {
   robot.respond(/hello/, function(res) {
     res.send('world');
