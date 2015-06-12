@@ -24,7 +24,26 @@ module.exports = function(robot) {
     secretAccessKey: process.env.HUBOT_EC2_VM_SCHEDULER_SECRET_ACCESS_KEY
   });
 
-  robot.respond(/ec2\s+start\s+(\S+)/, function(res) {
+  robot.respond(/ec2\s+list$/, function(res) {
+    var ec2 = new AWS.EC2();
+    ec2.describeInstances({}, function(err, data) {
+      if (err) {
+        res.send("Could not list instances");
+        return;
+      }
+
+      for (int i = 0; i < data.Reservations.length; i++) {
+        var r = data.Reservations[i];
+        for (int j = 0; j < r.Instances.length; j++) {
+          var instance = r.Instances[j];
+          res.send(instance.Name + " " + instance.State);
+        }
+      }
+
+    });
+  });
+
+  robot.respond(/ec2\s+start\s+(\S+)$/, function(res) {
     var name = res.match[1];
     // 仮実装
 
@@ -44,7 +63,8 @@ module.exports = function(robot) {
       res.send('start ' + name);
     });
 
-    res.send('starting ' + name + ' ...);
+    res.send('starting ' + name + ' ...');
   });
+
 };
 
