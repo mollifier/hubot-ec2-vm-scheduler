@@ -27,7 +27,24 @@ module.exports = function(robot) {
   robot.respond(/ec2\s+start\s+(\S+)/, function(res) {
     var name = res.match[1];
     // 仮実装
-    res.send('world ' + name);
+
+    // Class: AWS.EC2 — AWS SDK for JavaScript
+    // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html
+    var ec2 = new AWS.EC2();
+
+    var params = {
+      ImageId: 'xxx'
+    };
+
+    ec2.startInstances(params, function(err, data) {
+      if (err) {
+        res.send("Could not start instance", err);
+        return;
+      }
+      res.send('start ' + name);
+    });
+
+    res.send('starting ' + name + ' ...);
   });
 };
 
