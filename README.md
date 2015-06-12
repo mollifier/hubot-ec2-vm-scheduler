@@ -18,9 +18,23 @@ Then add **hubot-ec2-vm-scheduler** to your `external-scripts.json`:
 ]
 ```
 
+## Run in locall shell
+
+```
+% export PORT=50125
+% PATH=./node_modules/hubot/node_modules/.bin:$PATH $(npm bin)/hubot -a shell -n hubot -r src
+```
+
 ## Sample Interaction
 
 ```
 user1>> hubot hello
-hubot>> hello!
+hubot>> world
 ```
+
+## Run test
+
+```
+% grunt test
+```
+
