@@ -17,6 +17,7 @@
   },
 
   "dependencies": {
+    "aws-sdk": "~2.1.34"
   },
 
   "peerDependencies": {
