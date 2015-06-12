@@ -30,6 +30,8 @@ Then add **hubot-ec2-vm-scheduler** to your `external-scripts.json`:
 ```
 user1>> hubot hello
 hubot>> world
+
+user1>> hubot ec2 start XXX
 ```
 
 ## Run test

@@ -15,8 +15,10 @@
 //   mollifier <mollifier@gmail.com>
 
 module.exports = function(robot) {
-  robot.respond(/hello/, function(res) {
-    res.send('world');
+  robot.respond(/ec2\s+start\s+(\S+)/, function(res) {
+    var name = res.match[1];
+    // 仮実装
+    res.send('world ' + name);
   });
 };
 
