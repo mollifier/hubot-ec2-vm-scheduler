@@ -28,8 +28,9 @@ module.exports = function(robot) {
     secretAccessKey: process.env.HUBOT_EC2_VM_SCHEDULER_SECRET_ACCESS_KEY
   });
 
-  // ec2 list
-  robot.respond(/ec2\s+list$/, function(res) {
+  var cronJobList = [];
+
+  function listEc2Instance(res) {
     var ec2 = new AWS.EC2();
     ec2.describeInstances({}, function(err, data) {
       if (err) {
@@ -46,12 +47,9 @@ module.exports = function(robot) {
       }
 
     });
-  });
+  }
 
-  // ec2 start InstanceId
-  robot.respond(/ec2\s+start\s+(\S+)$/, function(res) {
-    var instanceId = res.match[1];
-
+  function startEc2Instance(res, instanceId) {
     var ec2 = new AWS.EC2();
 
     var params = {
@@ -69,12 +67,9 @@ module.exports = function(robot) {
     });
 
     res.send('starting ' + instanceId + ' ...');
-  });
+  }
 
-  // ec2 stop InstanceId
-  robot.respond(/ec2\s+stop\s+(\S+)$/, function(res) {
-    var instanceId = res.match[1];
-
+  function stopEc2Instance(res, instanceId) {
     var ec2 = new AWS.EC2();
 
     var params = {
@@ -92,6 +87,38 @@ module.exports = function(robot) {
     });
 
     res.send('stopping ' + instanceId + ' ...');
+  }
+
+  function addCronJob(instanceId, type, cronTime) {
+    var onTick = function() {
+    };
+    if (type === "start") {
+      onTick = function() {
+      };
+    } else if (type === "stop") {
+    }
+    var onComplete = function() {
+    };
+    var job = new CronJob(cronTime, onTick, onComplete, true, 'Asia/Tokyo');
+    cronJobList.push(job);
+  }
+
+
+  // ec2 list
+  robot.respond(/ec2\s+list$/, function(res) {
+    listEc2Instance(res);
+  });
+
+  // ec2 start InstanceId
+  robot.respond(/ec2\s+start\s+(\S+)$/, function(res) {
+    var instanceId = res.match[1];
+    startEc2Instance(res, instanceId);
+  });
+
+  // ec2 stop InstanceId
+  robot.respond(/ec2\s+stop\s+(\S+)$/, function(res) {
+    var instanceId = res.match[1];
+    stopEc2Instance(res, instanceId);
   });
 
   // ec2 schedule start i-01x 0 30 9 * * 1-5
