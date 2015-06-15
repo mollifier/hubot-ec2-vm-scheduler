@@ -36,7 +36,7 @@ module.exports = function(robot) {
         var r = data.Reservations[i];
         for (var j = 0; j < r.Instances.length; j++) {
           var instance = r.Instances[j];
-          res.send(instance.Name + " " + instance.State);
+          res.send(instance.InstanceId + " " + instance.State.Name);
         }
       }
 
