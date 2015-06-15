@@ -89,18 +89,21 @@ module.exports = function(robot) {
     res.send('stopping ' + instanceId + ' ...');
   }
 
-  function addCronJob(instanceId, type, cronTime) {
+  function addCronJob(res, instanceId, type, cronTime) {
     var onTick = function() {
     };
     if (type === "start") {
       onTick = function() {
+        startEc2Instance(res, instanceId);
       };
     } else if (type === "stop") {
+      onTick = function() {
+        stopEc2Instance(res, instanceId);
+      };
     }
-    var onComplete = function() {
-    };
-    var job = new CronJob(cronTime, onTick, onComplete, true, 'Asia/Tokyo');
+    var job = new CronJob(cronTime, onTick, null, true, 'Asia/Tokyo');
     cronJobList.push(job);
+    // TODO :robot.brain.set(key, machines);で永続化する
   }
 
 
@@ -127,6 +130,7 @@ module.exports = function(robot) {
     var cronTime = res.match[2];
     res.send('instanceId ' + instanceId);
     res.send('cronTime ' + cronTime);
+    addCronJob(res, instanceId, "start", cronTime);
   });
 };
 
