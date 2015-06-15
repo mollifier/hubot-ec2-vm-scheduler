@@ -28,13 +28,13 @@ module.exports = function(robot) {
     var ec2 = new AWS.EC2();
     ec2.describeInstances({}, function(err, data) {
       if (err) {
-        res.send("Could not list instances");
+        res.send("Could not list instances : " + err);
         return;
       }
 
-      for (int i = 0; i < data.Reservations.length; i++) {
+      for (var i = 0; i < data.Reservations.length; i++) {
         var r = data.Reservations[i];
-        for (int j = 0; j < r.Instances.length; j++) {
+        for (var j = 0; j < r.Instances.length; j++) {
           var instance = r.Instances[j];
           res.send(instance.Name + " " + instance.State);
         }
