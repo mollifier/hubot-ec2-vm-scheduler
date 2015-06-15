@@ -15,6 +15,10 @@
 //
 // Author:
 //   mollifier <mollifier@gmail.com>
+//
+// See also:
+//   Class: AWS.EC2 — AWS SDK for JavaScript
+//   http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html
 
 module.exports = function(robot) {
   var AWS = require('aws-sdk');
@@ -24,6 +28,7 @@ module.exports = function(robot) {
     secretAccessKey: process.env.HUBOT_EC2_VM_SCHEDULER_SECRET_ACCESS_KEY
   });
 
+  // ec2 list
   robot.respond(/ec2\s+list$/, function(res) {
     var ec2 = new AWS.EC2();
     ec2.describeInstances({}, function(err, data) {
@@ -43,27 +48,27 @@ module.exports = function(robot) {
     });
   });
 
+  // ec2 start InstanceId
   robot.respond(/ec2\s+start\s+(\S+)$/, function(res) {
-    var name = res.match[1];
-    // 仮実装
+    var instanceId = res.match[1];
 
-    // Class: AWS.EC2 — AWS SDK for JavaScript
-    // http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html
     var ec2 = new AWS.EC2();
 
     var params = {
-      ImageId: 'xxx'
+      InstanceIds: [
+        instanceId
+      ]
     };
 
     ec2.startInstances(params, function(err, data) {
       if (err) {
-        res.send("Could not start instance", err);
+        res.send("Could not start instance : " + err);
         return;
       }
-      res.send('start ' + name);
+      res.send('start ' + instanceId);
     });
 
-    res.send('starting ' + name + ' ...');
+    res.send('starting ' + instanceId + ' ...');
   });
 
 };
