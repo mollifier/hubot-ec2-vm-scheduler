@@ -93,5 +93,13 @@ module.exports = function(robot) {
 
     res.send('stopping ' + instanceId + ' ...');
   });
+
+  // ec2 schedule start i-01x 0 30 9 * * 1-5
+  robot.respond(/ec2\s+schedule\s+start\s+(\S+)\s+(.+)$/, function(res) {
+    var instanceId = res.match[1];
+    var cronTime = res.match[2];
+    res.send('instanceId ' + instanceId);
+    res.send('cronTime ' + cronTime);
+  });
 };
 
