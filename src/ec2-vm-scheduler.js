@@ -71,5 +71,27 @@ module.exports = function(robot) {
     res.send('starting ' + instanceId + ' ...');
   });
 
+  // ec2 stop InstanceId
+  robot.respond(/ec2\s+stop\s+(\S+)$/, function(res) {
+    var instanceId = res.match[1];
+
+    var ec2 = new AWS.EC2();
+
+    var params = {
+      InstanceIds: [
+        instanceId
+      ]
+    };
+
+    ec2.stopInstances(params, function(err, data) {
+      if (err) {
+        res.send("Could not stop instance : " + err);
+        return;
+      }
+      res.send('stop ' + instanceId);
+    });
+
+    res.send('stopping ' + instanceId + ' ...');
+  });
 };
 
