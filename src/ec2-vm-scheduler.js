@@ -183,5 +183,16 @@ module.exports = function(robot) {
     var cronTime = res.match[2];
     addCronJob(instanceId, "stop", cronTime);
   });
+
+  // ec2 schedule list
+  robot.respond(/ec2\s+schedule\s+list$/, function(res) {
+    var cronTimeDataList = robot.brain.get(brainKey);
+    if (cronTimeDataList === null) {
+      cronTimeDataList = [];
+    }
+    cronTimeDataList.forEach(function(cronTimeData, index) {
+      res.send("[" + index.toString() + "] " + cronTimeData.instanceId + " " + cronTimeData.type + " " + cronTimeData.cronTime);
+    });
+  });
 };
 
