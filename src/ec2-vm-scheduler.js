@@ -153,6 +153,26 @@ module.exports = function(robot) {
     });
   });
 
+  // ec2 help
+  robot.respond(/ec2\s+help$/, function(res) {
+    var messages = [
+      "ec2 list",
+      "ec2 start INSTANCE_ID",
+      "ec2 stop INSTANCE_ID",
+      "ec2 schedule start INSTANCE_ID CRON_TIME",
+      "ec2 schedule stop INSTANCE_ID CRON_TIME",
+      "ec2 schedule list",
+      "ec2 schedule delete INDEX",
+      "ec2 help",
+      "",
+      "Examples:",
+      "ec2 schedule start i-01x 0 30 9 * * 1-5",
+      "ec2 schedule stop i-01x 0 30 18 * * 1-5",
+      "ec2 schedule delete 0"
+    ];
+    res.send(messages.join("\n"));
+  });
+
   // ec2 list
   robot.respond(/ec2\s+list$/, function(res) {
     listEc2Instance(res);
