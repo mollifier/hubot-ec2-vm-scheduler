@@ -21,6 +21,7 @@ Then add **hubot-ec2-vm-scheduler** to your `external-scripts.json`:
 ## Configuration
 
 ```
+export HUBOT_EC2_VM_SCHEDULER_ROOM="_development"
 export HUBOT_EC2_VM_SCHEDULER_ACCESS_KEY_ID="AXXXX"
 export HUBOT_EC2_VM_SCHEDULER_SECRET_ACCESS_KEY="Yyyyy8"
 ```

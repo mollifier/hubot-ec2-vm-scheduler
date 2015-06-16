@@ -3,6 +3,7 @@
 //
 // Configuration:
 //   LIST_OF_ENV_VARS_TO_SET
+//   HUBOT_EC2_VM_SCHEDULER_ROOM
 //   HUBOT_EC2_VM_SCHEDULER_ACCESS_KEY_ID
 //   HUBOT_EC2_VM_SCHEDULER_SECRET_ACCESS_KEY
 //
@@ -38,7 +39,7 @@ module.exports = function(robot) {
     if (res) {
       res.send(message);
     } else {
-      robot.messageRoom("_development", message);
+      robot.messageRoom(process.env.HUBOT_EC2_VM_SCHEDULER_ROOM, message);
     }
   }
 
