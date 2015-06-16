@@ -176,5 +176,12 @@ module.exports = function(robot) {
     var cronTime = res.match[2];
     addCronJob(instanceId, "start", cronTime);
   });
+
+  // ec2 schedule stop i-01x 0 30 18 * * 1-5
+  robot.respond(/ec2\s+schedule\s+stop\s+(\S+)\s+(.+)$/, function(res) {
+    var instanceId = res.match[1];
+    var cronTime = res.match[2];
+    addCronJob(instanceId, "stop", cronTime);
+  });
 };
 
