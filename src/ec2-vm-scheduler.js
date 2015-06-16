@@ -194,5 +194,21 @@ module.exports = function(robot) {
       res.send("[" + index.toString() + "] " + cronTimeData.instanceId + " " + cronTimeData.type + " " + cronTimeData.cronTime);
     });
   });
+
+  // ec2 schedule delete 0
+  robot.respond(/ec2\s+schedule\s+delete\s+(\d+)$/, function(res) {
+    var index = parseInt(res.match[1], 10);
+
+    var cronTimeDataList = robot.brain.get(brainKey);
+    if (cronTimeDataList === null) {
+      cronTimeDataList = [];
+    }
+
+    if (index >= 0 && index < cronTimeDataList.length) {
+      cronTimeDataList.splice(index, 1);
+      robot.brain.set(brainKey, cronTimeDataList);
+    }
+  });
+
 };
 
