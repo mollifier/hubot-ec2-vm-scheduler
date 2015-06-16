@@ -102,6 +102,13 @@ module.exports = function(robot) {
   }
 
   function addCronJob(instanceId, type, cronTime) {
+    // バリデーション
+    try {
+      new CronJob(cronTime, function() {});
+    } catch(ex) {
+      return false;
+    }
+
     var cronTimeDataList = robot.brain.get(brainKey);
     if (cronTimeDataList === null) {
       cronTimeDataList = [];
@@ -115,6 +122,8 @@ module.exports = function(robot) {
     );
     robot.brain.set(brainKey, cronTimeDataList);
     // CronJobの登録はrobot.brain.on 'loaded'イベントハンドラで行います
+
+    return true;
   }
 
   // robot.brainの最初の読み込みが完了したとき、または明示的にrobot.brain.setを呼び出したときのイベントハンドラ
@@ -194,14 +203,24 @@ module.exports = function(robot) {
   robot.respond(/ec2\s+schedule\s+start\s+(\S+)\s+(.+)$/, function(res) {
     var instanceId = res.match[1];
     var cronTime = res.match[2];
-    addCronJob(instanceId, "start", cronTime);
+    var success = addCronJob(instanceId, "start", cronTime);
+    if (success) {
+      res.send("ec2 仮想マシン開始処理を登録しました : " + cronTime);
+    } else {
+      res.send("cronTimeが不正です : " + cronTime);
+    }
   });
 
   // ec2 schedule stop i-01x 0 30 18 * * 1-5
   robot.respond(/ec2\s+schedule\s+stop\s+(\S+)\s+(.+)$/, function(res) {
     var instanceId = res.match[1];
     var cronTime = res.match[2];
-    addCronJob(instanceId, "stop", cronTime);
+    var success = addCronJob(instanceId, "stop", cronTime);
+    if (success) {
+      res.send("ec2 仮想マシン停止処理を登録しました : " + cronTime);
+    } else {
+      res.send("cronTimeが不正です : " + cronTime);
+    }
   });
 
   // ec2 schedule list
@@ -227,6 +246,7 @@ module.exports = function(robot) {
     if (index >= 0 && index < cronTimeDataList.length) {
       cronTimeDataList.splice(index, 1);
       robot.brain.set(brainKey, cronTimeDataList);
+      res.send("ec2 仮想マシン予約登録を削除しました");
     }
   });
 
